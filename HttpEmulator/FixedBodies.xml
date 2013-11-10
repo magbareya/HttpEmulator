@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FixedBodies>
+
+  <FixedBody name="EchoString response">
+    <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+      <soap:Body>
+        <EchoStringResponse xmlns="http://tempuri.org/">
+          <EchoStringResult>aaa</EchoStringResult>
+        </EchoStringResponse>
+      </soap:Body>
+    </soap:Envelope>
+  </FixedBody>
+  
+  <FixedBody name="Auto Xml response">
+    <a>aaaa</a>
+  </FixedBody>
+  
+  <FixedBody name="Auto Json response" statusCode="200">{"a":"b"}</FixedBody>
+  
+  <FixedBody name="SOAP11 Fault" statusCode="400">
+    <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <soap:Body>
+        <soap:Fault>
+          <faultcode>soap:Server</faultcode>
+          <faultstring>Server was unable to process request. ---&gt; this is a soap fault</faultstring>
+          <detail/>
+        </soap:Fault>
+      </soap:Body>
+    </soap:Envelope>
+  </FixedBody>
+  
+  <FixedBody name="SOAP12 Fault" statusCode="400">
+    <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <soap:Body>
+        <soap:Fault>
+          <soap:Code>
+            <soap:Value>soap:Receiver</soap:Value>
+          </soap:Code>
+          <soap:Reason>
+            <soap:Text xml:lang="en">Server was unable to process request. ---&gt; this is a soap fault</soap:Text>
+          </soap:Reason>
+          <soap:Detail/>
+        </soap:Fault>
+      </soap:Body>
+    </soap:Envelope>
+  </FixedBody>
+  
+</FixedBodies>
