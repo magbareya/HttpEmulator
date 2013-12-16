@@ -3,11 +3,12 @@ using System.Net;
 
 namespace HttpEmulator
 {
-    class FixedHttpResponse : HttpListenerBase
+    internal class FixedHttpResponse : HttpListenerBase
     {
         public string Content { get; internal set; }
 
-        public FixedHttpResponse(int port) : base(port)
+        public FixedHttpResponse(int port)
+            : base(port)
         {
         }
 

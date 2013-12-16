@@ -5,11 +5,12 @@ using System.Text;
 
 namespace HttpEmulator.Model
 {
-    class EmptyResponse : HttpListenerBase
+    internal class EmptyResponse : HttpListenerBase
     {
-        public EmptyResponse(int port): base(port)
+        public EmptyResponse(int port)
+            : base(port)
         {
-            
+
         }
 
         protected override void HandleResponse(System.Net.HttpListenerContext context)

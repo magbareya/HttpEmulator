@@ -1,10 +1,10 @@
 ﻿
 namespace HttpEmulator
 {
-    class FaultHttpResponse : HttpListenerBase
-
+    internal class FaultHttpResponse : HttpListenerBase
     {
-        public FaultHttpResponse(int port) : base(port)
+        public FaultHttpResponse(int port)
+            : base(port)
         {
         }
 

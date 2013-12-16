@@ -25,10 +25,13 @@ namespace HttpEmulator
     {
 
         #region events
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         #endregion
 
         #region constants
+
         internal const string Bar = "=========================================================";
         internal const string StartListening = "A new {0} listener was started with address: http://localhost:{1} - {2}";
         internal const string StopListening = "The {0} listener on http://localhost:{1} was stopped - {2}";
@@ -37,6 +40,7 @@ namespace HttpEmulator
         #endregion
 
         #region private fields
+
         private HttpListenerBase _listener;
         private List<string> _statusCodes;
         private ListenerType CurrentListenerType { get; set; }
@@ -52,12 +56,14 @@ namespace HttpEmulator
         private bool _isWrapChecked;
         private int _selectedFixedBodyIndex;
         private int _selectedStatusCodeIndex;
+
         #endregion
 
         #region Constructor
+
         public HttpEmulatorViewModel()
         {
-            this.RawHeaders =  "key : value";
+            this.RawHeaders = "key : value";
             this.HostAddress = "8090";
             this.IsEmptyChecked = true;
             this.IsWrapChecked = true;
@@ -65,6 +71,7 @@ namespace HttpEmulator
             this.LogText = string.Empty;
             this._preDefinedFixedBodies = Utils.GetFixedBodiesFromConfig();
         }
+
         #endregion
 
         #region View Properties
@@ -89,9 +96,9 @@ namespace HttpEmulator
                 if (this._statusCodes == null)
                 {
                     _statusCodes = new List<string>();
-                    var codes = Enum.GetValues(typeof(HttpStatusCode));
+                    var codes = Enum.GetValues(typeof (HttpStatusCode));
                     foreach (var code in codes)
-                        _statusCodes.Add(string.Format("{0} - {1}", (int)code, code));
+                        _statusCodes.Add(string.Format("{0} - {1}", (int) code, code));
                 }
                 return this._statusCodes;
             }
@@ -233,23 +240,33 @@ namespace HttpEmulator
             }
         }
 
-        public bool IsStatusCodeEnabled { get { return this.IsEchoChecked | this.IsFixedChecked; } }
+        public bool IsStatusCodeEnabled
+        {
+            get { return this.IsEchoChecked | this.IsFixedChecked; }
+        }
 
-        public bool IsHeadersTextBoxEnabled { get { return this.IsFixedChecked; } }
+        public bool IsHeadersTextBoxEnabled
+        {
+            get { return this.IsFixedChecked; }
+        }
 
         public TextWrapping FixedBodyWrapping
         {
             get { return this.IsWrapChecked ? TextWrapping.Wrap : TextWrapping.NoWrap; }
         }
 
-        public string LogText { get { return this._logText; } set
+        public string LogText
         {
-            if (this._logText != value)
+            get { return this._logText; }
+            set
             {
-                this._logText = value;
-                this.OnPropertyChanged("LogText");
+                if (this._logText != value)
+                {
+                    this._logText = value;
+                    this.OnPropertyChanged("LogText");
+                }
             }
-        } }
+        }
 
         public bool IsListenerStarted
         {
@@ -262,7 +279,7 @@ namespace HttpEmulator
 
         public void OnStartClick()
         {
-            if(this._listener != null && this._listener.IsListening)
+            if (this._listener != null && this._listener.IsListening)
                 OnStopListener();
 
             var listenerType = GetCheckedListenerType();
@@ -295,11 +312,11 @@ namespace HttpEmulator
             var result = dlg.ShowDialog();
 
             // Process save file dialog box results
-            string filename =string.Empty;
+            string filename = string.Empty;
             if (result == true)
             {
                 // Save document
-                 filename = dlg.FileName;
+                filename = dlg.FileName;
             }
 
             if (!string.IsNullOrEmpty(filename))
@@ -359,8 +376,8 @@ namespace HttpEmulator
         private void AddHttpHeadersToListener(HttpListenerBase listener)
         {
             foreach (string header in this.RawHeaders.Split(
-                            new [] { Environment.NewLine },
-                            StringSplitOptions.RemoveEmptyEntries))
+                new[] {Environment.NewLine},
+                StringSplitOptions.RemoveEmptyEntries))
             {
                 var items = header.Split(':');
                 listener.Headers.Add(items[0].Trim(), items[1].Trim());
@@ -415,9 +432,10 @@ namespace HttpEmulator
                 string.Format(
                     @"Failed to listen on prefix 'http://*:{0}/' because it conflicts with an existing registration on the machine.",
                     portNum);
-            
+
             var exceptionMessage = e.Message.ToLowerInvariant().Equals(portInUseMsg.ToLowerInvariant())
-                                       ? string.Format("The port {0} is already in use, please choose another port", portNum)
+                                       ? string.Format("The port {0} is already in use, please choose another port",
+                                                       portNum)
                                        : e.Message;
             MessageBox.Show(string.Format("Error: {0}", exceptionMessage));
             OnStopListener();
@@ -431,8 +449,8 @@ namespace HttpEmulator
                 string portNum = selectedCode.Substring(0, 3);
                 return int.Parse(portNum);
             }
-            set 
-            { 
+            set
+            {
                 var key = this._statusCodes.FirstOrDefault(s => s.Contains(value.ToString()));
                 if (!string.IsNullOrEmpty(key) && this._statusCodes.Contains(key))
                     this.SelectedStatusCodeIndex = this._statusCodes.IndexOf(key);
@@ -445,13 +463,27 @@ namespace HttpEmulator
 
         private void WriteRequestToLog(object sender, string content, SortedList<String, String> headers)
         {
+            var listener = sender as HttpListenerBase;
             var builder = new StringBuilder(this.LogText);
             builder.AppendLine();
-            builder.Append(string.Format("Request recieved at: {0}", DateTime.Now.ToShortTimeString()));
-            builder.AppendLine();
+
+            builder.AppendLine(string.Format("Request recieved at: {0}", DateTime.Now.ToShortTimeString()));
+
+            builder.AppendLine(string.Format("Request URL: {0}", listener.Url));
+
+            builder.AppendLine("Headers:");
             foreach (var pair in headers)
-                builder.Append(string.Format("{0} : {1}{2}", pair.Key, pair.Value, Environment.NewLine));
-            builder.Append(Utils.TryFormatText(content));
+                builder.AppendLine(string.Format("   {0} : {1}", pair.Key, pair.Value));
+
+            builder.AppendLine("Request Body: ");
+            using (var stringReader = new StringReader(Utils.TryFormatText(content)))
+            {
+                for (string line = stringReader.ReadLine(); line != null; line = stringReader.ReadLine())
+                {
+                    builder.AppendLine(string.Format("   {0}", line));
+                }
+            }
+
             builder.AppendLine();
             this.LogText = builder.ToString();
             builder.Clear();
@@ -463,8 +495,9 @@ namespace HttpEmulator
                 return;
             var builder = new StringBuilder(this.LogText);
             builder.AppendLine();
-            builder.Append(string.Format(StartListening, this.CurrentListenerType.ToString(), this._listener.RunningPort, DateTime.Now.ToShortTimeString()));
-            builder.AppendLine();
+            builder.AppendLine(string.Format(StartListening, this.CurrentListenerType.ToString(),
+                                             this._listener.RunningPort,
+                                             DateTime.Now.ToShortTimeString()));
             this.LogText = builder.ToString();
             builder.Clear();
         }
@@ -473,11 +506,10 @@ namespace HttpEmulator
         {
             var builder = new StringBuilder(this.LogText);
             builder.AppendLine();
-            builder.Append(string.Format(StopListening, this.CurrentListenerType.ToString(), this._listener.RunningPort,
-                                         DateTime.Now.ToShortTimeString()));
-            builder.AppendLine();
-            builder.Append(Bar);
-            builder.AppendLine();
+            builder.AppendLine(string.Format(StopListening, this.CurrentListenerType.ToString(),
+                                             this._listener.RunningPort,
+                                             DateTime.Now.ToShortTimeString()));
+            builder.AppendLine(Bar);
 
             this.LogText = builder.ToString();
             builder.Clear();
@@ -506,16 +538,20 @@ namespace HttpEmulator
                 this.PropertyChanged(this, e);
             }
         }
+
         #endregion
 
         #region Commands
+
         private class GeneralCommand : ICommand
         {
             private readonly Action _executeDelegate;
+
             public GeneralCommand(Action executeDelegate)
             {
                 this._executeDelegate = executeDelegate;
             }
+
             public bool CanExecute(object parameter)
             {
                 return true;
@@ -548,7 +584,7 @@ namespace HttpEmulator
         {
             get { return new GeneralCommand(this.OnStopListener); }
         }
-        
+
         public ICommand SaveToFileCommand
         {
             get { return new GeneralCommand(this.OnSaveToFileClick); }

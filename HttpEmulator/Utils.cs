@@ -83,7 +83,7 @@ namespace HttpEmulator
 
                 if (!File.Exists(filePath))
                     return responses;
-                
+
                 doc.Load(filePath);
                 var fixedBodyNodes = doc.SelectNodes(@"FixedBodies/FixedBody");
                 if (fixedBodyNodes == null)

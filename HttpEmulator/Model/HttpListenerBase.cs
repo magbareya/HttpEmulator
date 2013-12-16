@@ -9,17 +9,20 @@ namespace HttpEmulator
     public abstract class HttpListenerBase
     {
         public delegate void RequestReceived(object sender, string content, SortedList<String, String> headers);
+
         public delegate void ErrorOccured(Exception e);
 
         public event RequestReceived OnRequestReceived;
         public event ErrorOccured OnError;
 
         #region Properties
+
         public SortedList<string, string> Headers { get; internal set; }
         public int Port { get; internal set; }
         public int StatusCode { get; set; }
         public string RequestBody { get; set; }
         public int RunningPort { get; set; }
+        public string Url { get; set; }
 
         public bool IsListening
         {
@@ -32,6 +35,7 @@ namespace HttpEmulator
 
         protected Thread ListenerThread;
         protected HttpListener Listener;
+
         #endregion
 
         #region constructors
@@ -88,12 +92,15 @@ namespace HttpEmulator
                     OnError(e);
                 return;
             }
-            
+
             while (true)
             {
                 var ctx = Listener.GetContext();
                 var reader = new StreamReader(ctx.Request.InputStream);
+
                 this.RequestBody = reader.ReadToEnd();
+                this.Url = ctx.Request.Url.ToString();
+
                 reader.Close();
                 new Thread(ProcessRequest).Start(ctx);
             }
@@ -103,24 +110,18 @@ namespace HttpEmulator
         {
             var context = ctx as HttpListenerContext;
 
-            LogRequest(context);
+            InvokeOnRequestReceived(context);
             HandleResponse(context);
         }
 
-        protected virtual void LogRequest(HttpListenerContext context)
+        protected virtual void InvokeOnRequestReceived(HttpListenerContext context)
         {
             var headers = new SortedList<string, string>();
             foreach (string h in context.Request.Headers)
                 headers.Add(h, context.Request.Headers[h]);
 
-            InvokeOnRequestReceived(this.RequestBody, headers);
-        }
-
-        protected virtual void InvokeOnRequestReceived(string content, SortedList<string, string> headers)
-        {
-            RequestReceived received = OnRequestReceived;
-            if (received != null)
-                received(this, content, headers);
+            if (this.OnRequestReceived != null)
+                this.OnRequestReceived(this, this.RequestBody, headers);
         }
 
         protected virtual void HandleResponse(HttpListenerContext context)

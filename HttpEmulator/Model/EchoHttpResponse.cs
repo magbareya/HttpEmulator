@@ -3,9 +3,10 @@ using System.Net;
 
 namespace HttpEmulator
 {
-    class EchoHttpResponse : HttpListenerBase
+    internal class EchoHttpResponse : HttpListenerBase
     {
-        public EchoHttpResponse(int port) : base(port)
+        public EchoHttpResponse(int port)
+            : base(port)
         {
         }
 
