@@ -121,8 +121,7 @@ namespace HttpEmulator
             get { return this._selectedStatusCodeIndex; }
             set
             {
-                if (
-                    this._selectedStatusCodeIndex != value)
+                if (this._selectedStatusCodeIndex != value)
                 {
                     this._selectedStatusCodeIndex = value;
                     this.OnPropertyChanged("SelectedStatusCodeIndex");

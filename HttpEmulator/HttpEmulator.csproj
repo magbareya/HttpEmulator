@@ -11,7 +11,7 @@
     <DefaultClrNameSpace>WpfApplication1</DefaultClrNameSpace>
     <RootNamespace>HttpEmulator</RootNamespace>
     <AssemblyName>HttpEmulator</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

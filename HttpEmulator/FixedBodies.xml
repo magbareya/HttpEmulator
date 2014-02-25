@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FixedBodies>
-
-  <FixedBody name="EchoString response">
+  <FixedBody name="EchoString SOAP1.1 response">
     <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
       <soap:Body>
         <EchoStringResponse xmlns="http://tempuri.org/">
@@ -10,13 +9,17 @@
       </soap:Body>
     </soap:Envelope>
   </FixedBody>
-  
+  <FixedBody name="EchoString SOAP1.2 response">
+    <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <soap:Body>
+        <EchoStringResponse xmlns="http://tempuri.org/"/>
+      </soap:Body>
+    </soap:Envelope>
+  </FixedBody>
   <FixedBody name="Auto Xml response">
     <a>aaaa</a>
   </FixedBody>
-  
   <FixedBody name="Auto Json response" statusCode="200">{"a":"b"}</FixedBody>
-  
   <FixedBody name="SOAP11 Fault" statusCode="400">
     <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
       <soap:Body>
@@ -28,7 +31,6 @@
       </soap:Body>
     </soap:Envelope>
   </FixedBody>
-  
   <FixedBody name="SOAP12 Fault" statusCode="400">
     <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
       <soap:Body>
@@ -44,5 +46,4 @@
       </soap:Body>
     </soap:Envelope>
   </FixedBody>
-  
 </FixedBodies>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Windows;
 
 namespace HttpEmulator
 {
@@ -108,10 +109,28 @@ namespace HttpEmulator
 
         protected virtual void ProcessRequest(object ctx)
         {
-            var context = ctx as HttpListenerContext;
+            var context= ctx as HttpListenerContext;
 
-            InvokeOnRequestReceived(context);
-            HandleResponse(context);
+            try
+            {
+                InvokeOnRequestReceived(context);
+                HandleResponse(context);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                try
+                {
+                    if (context.Response != null)
+                    {
+                        context.Response.OutputStream.Close();
+                    }
+                }
+                catch (Exception)
+                {
+                }
+                Thread.CurrentThread.Abort();
+            }
         }
 
         protected virtual void InvokeOnRequestReceived(HttpListenerContext context)
@@ -129,9 +148,22 @@ namespace HttpEmulator
             foreach (var h in this.Headers)
             {
                 if (h.Key == "Content-Type")
+                {
                     context.Response.ContentType = h.Value;
+                }
+                else if (h.Key == " Keep-Alive")
+                {
+                    bool val;
+                    if (!bool.TryParse(h.Value, out val))
+                    {
+                        val = true;
+                    }
+                    context.Response.KeepAlive = val;
+                }
                 else
+                {
                     context.Response.Headers.Add(h.Key, h.Value);
+                }
             }
             context.Response.StatusCode = this.StatusCode;
         }
