@@ -7,13 +7,11 @@ namespace HttpEmulator.Model
 {
     internal class EmptyResponse : HttpListenerBase
     {
-        public EmptyResponse(int port)
-            : base(port)
+        public EmptyResponse(int port) : base(port)
         {
-
         }
 
-        protected override void HandleResponse(System.Net.HttpListenerContext context)
+        protected override void HandleRequestInternal(System.Net.HttpListenerContext context)
         {
             context.Response.OutputStream.Close();
         }

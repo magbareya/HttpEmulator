@@ -1,0 +1,19 @@
+﻿<Window x:Class="HttpEmulator.AdvancedForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AdvancedForm" Height="300" Width="300">
+    <Grid>
+        <Label Content="Username:" HorizontalAlignment="Left" Margin="50,32,0,0" VerticalAlignment="Top" Width="68"/>
+        <Label Content="Password:" HorizontalAlignment="Left" Margin="50,58,0,0" VerticalAlignment="Top" Width="68"/>
+
+        <Button  Name="btnOk" Content="OK" IsDefault="True" HorizontalAlignment="Left" Margin="81,233,0,0" VerticalAlignment="Top" Width="89" Height="29"/>
+        <Button Name="btnCancel" IsCancel="True" Content="Cancel" HorizontalAlignment="Left" Margin="185,233,0,0" VerticalAlignment="Top" Width="89" Height="29"/>
+
+        <CheckBox Name="chkUseAuthentication" IsChecked="{Binding UseAuthentication, UpdateSourceTrigger=PropertyChanged}" Content="Use authentication" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="124" Height="22"/>
+        <CheckBox Name="chkUsePreemptive" IsChecked="{Binding IsPreemptiveAuthentication, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UseAuthentication}" Content="Is preemptive authentication" HorizontalAlignment="Left" Margin="57,89,0,0" VerticalAlignment="Top" Width="223"/>
+
+        <TextBox Name="txtUsername" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UseAuthentication}" HorizontalAlignment="Left" Height="23" Margin="118,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="156"/>
+        <TextBox Name="txtPassword" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UseAuthentication}" HorizontalAlignment="Left" Height="23" Margin="118,58,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="156"/>
+
+    </Grid>
+</Window>

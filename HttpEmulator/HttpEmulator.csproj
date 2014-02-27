@@ -62,14 +62,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdvancedForm.xaml.cs">
+      <DependentUpon>AdvancedForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Authentication.cs" />
     <Compile Include="Model\EchoHttpResponse.cs" />
     <Compile Include="Model\EmptyHttpResponse.cs" />
     <Compile Include="Model\FaultHttpResponse.cs" />
     <Compile Include="Model\FixedHttpResponse.cs" />
     <Compile Include="Model\HttpListenerBase.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="ViewModel\AdvancedFormViewModel.cs" />
     <Compile Include="ViewModel\HttpEmulatorViewModel.cs" />
     <Compile Include="ViewModel\PreDefinedFixedBody.cs" />
+    <Page Include="AdvancedForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

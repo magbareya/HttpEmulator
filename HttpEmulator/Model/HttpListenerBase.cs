@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Windows;
 
@@ -24,6 +25,7 @@ namespace HttpEmulator
         public string RequestBody { get; set; }
         public int RunningPort { get; set; }
         public string Url { get; set; }
+        public Authentication Authentication { get; set; }
 
         public bool IsListening
         {
@@ -80,9 +82,9 @@ namespace HttpEmulator
 
         protected virtual void ThreadStart()
         {
-            Listener = new HttpListener();
-            Listener.Prefixes.Add(String.Format("http://*:{0}/", Port));
-
+            this.Listener = new HttpListener();
+            this.Listener.Prefixes.Add(String.Format("http://*:{0}/", Port));
+            this.HandleListenerAuthentication();
             try
             {
                 Listener.Start();
@@ -96,7 +98,7 @@ namespace HttpEmulator
 
             while (true)
             {
-                var ctx = Listener.GetContext();
+                var ctx = this.Listener.GetContext();
                 var reader = new StreamReader(ctx.Request.InputStream);
 
                 this.RequestBody = reader.ReadToEnd();
@@ -107,6 +109,17 @@ namespace HttpEmulator
             }
         }
 
+        private void HandleListenerAuthentication()
+        {
+            if (this.Authentication == null || string.IsNullOrEmpty(this.Authentication.Username) ||
+                this.Authentication.IsPreemptiveAuthentication)
+            {
+                return;
+            }
+
+            this.Listener.AuthenticationSchemes = AuthenticationSchemes.Basic;
+        }
+
         protected virtual void ProcessRequest(object ctx)
         {
             var context= ctx as HttpListenerContext;
@@ -114,7 +127,7 @@ namespace HttpEmulator
             try
             {
                 InvokeOnRequestReceived(context);
-                HandleResponse(context);
+                HandleRequest(context);
             }
             catch (Exception e)
             {
@@ -143,7 +156,7 @@ namespace HttpEmulator
                 this.OnRequestReceived(this, this.RequestBody, headers);
         }
 
-        protected virtual void HandleResponse(HttpListenerContext context)
+        protected virtual void HandleRequest(HttpListenerContext context)
         {
             foreach (var h in this.Headers)
             {
@@ -165,7 +178,56 @@ namespace HttpEmulator
                     context.Response.Headers.Add(h.Key, h.Value);
                 }
             }
-            context.Response.StatusCode = this.StatusCode;
+
+            if (this.HandleRequestAuthentication(context))
+            {
+                context.Response.StatusCode = this.StatusCode;
+                this.HandleRequestInternal(context);
+            }
+            else
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                context.Response.OutputStream.Close();
+            }
+        }
+        
+        protected abstract void HandleRequestInternal(HttpListenerContext context);
+
+        protected virtual bool HandleRequestAuthentication(HttpListenerContext context)
+        {
+            if (this.Authentication == null || string.IsNullOrEmpty(this.Authentication.Username))
+            {
+                return true;
+            }
+
+            string username = null, password = null;
+
+            if (this.Authentication.IsPreemptiveAuthentication)
+            {
+                var authorization = context.Request.Headers.Get("Authorization");
+                if(authorization == null)
+                    return false;
+
+                var hashsedValue = authorization.Split(' ')[1];
+                var usernamePasswordArray = Encoding.UTF8.GetString(Convert.FromBase64String(hashsedValue)).Split(':');
+                username = usernamePasswordArray[0];
+                password = usernamePasswordArray[1];
+            }
+
+            else
+            {
+                if (context.User == null || !context.User.Identity.IsAuthenticated)
+                {
+                    return false;
+                }
+
+                var identity = (HttpListenerBasicIdentity) context.User.Identity;
+                username = identity.Name;
+                password = identity.Password;
+            }
+
+            return this.Authentication.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase) &&
+                   this.Authentication.Password.Equals(password, StringComparison.InvariantCulture);
         }
 
         #endregion

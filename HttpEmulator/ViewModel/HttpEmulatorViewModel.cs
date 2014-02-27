@@ -45,6 +45,7 @@ namespace HttpEmulator
         private List<string> _statusCodes;
         private ListenerType CurrentListenerType { get; set; }
         private Dictionary<string, PreDefinedFixedBody> _preDefinedFixedBodies;
+        private AdvancedFormViewModel _advancedSettings;
         private string _hostAddress;
         private string _fixedBody;
         private string _rawHeaders;
@@ -76,6 +77,12 @@ namespace HttpEmulator
 
         #region View Properties
 
+        public AdvancedFormViewModel AdvancedSettings
+        {
+            get { return this._advancedSettings; }
+            set { this._advancedSettings = value; }
+        }
+
         public string HostAddress
         {
             get { return this._hostAddress; }
@@ -84,7 +91,7 @@ namespace HttpEmulator
                 if (value != this._hostAddress)
                 {
                     this._hostAddress = value;
-                    this.OnPropertyChanged("HostAddress");
+                    this.InvokePropertyChanged("HostAddress");
                 }
             }
         }
@@ -124,7 +131,7 @@ namespace HttpEmulator
                 if (this._selectedStatusCodeIndex != value)
                 {
                     this._selectedStatusCodeIndex = value;
-                    this.OnPropertyChanged("SelectedStatusCodeIndex");
+                    this.InvokePropertyChanged("SelectedStatusCodeIndex");
                 }
             }
         }
@@ -138,7 +145,7 @@ namespace HttpEmulator
                     this._selectedFixedBodyIndex != value)
                 {
                     this._selectedFixedBodyIndex = value;
-                    this.OnPropertyChanged("SelectedFixedBodyIndex");
+                    this.InvokePropertyChanged("SelectedFixedBodyIndex");
                 }
             }
         }
@@ -152,7 +159,7 @@ namespace HttpEmulator
                 if (value != this._fixedBody)
                 {
                     this._fixedBody = value;
-                    this.OnPropertyChanged("FixedBody");
+                    this.InvokePropertyChanged("FixedBody");
                 }
             }
         }
@@ -165,8 +172,8 @@ namespace HttpEmulator
                 if (this._rawHeaders != value)
                 {
                     this._rawHeaders = value;
-                    this.OnPropertyChanged("RawHeaders");
-                    this.OnPropertyChanged("IsStatusCodeEnabled");
+                    this.InvokePropertyChanged("RawHeaders");
+                    this.InvokePropertyChanged("IsStatusCodeEnabled");
                 }
             }
         }
@@ -179,7 +186,7 @@ namespace HttpEmulator
                 if (this._isEchoChecked != value)
                 {
                     this._isEchoChecked = value;
-                    this.OnPropertyChanged("IsEchoChecked");
+                    this.InvokePropertyChanged("IsEchoChecked");
                 }
             }
         }
@@ -192,7 +199,7 @@ namespace HttpEmulator
                 if (this._isEmptyChecked != value)
                 {
                     this._isEmptyChecked = value;
-                    this.OnPropertyChanged("IsEmptyChecked");
+                    this.InvokePropertyChanged("IsEmptyChecked");
                 }
             }
         }
@@ -205,7 +212,7 @@ namespace HttpEmulator
                 if (this._isFaultChecked != value)
                 {
                     this._isFaultChecked = value;
-                    this.OnPropertyChanged("IsFaultChecked");
+                    this.InvokePropertyChanged("IsFaultChecked");
                 }
             }
         }
@@ -218,9 +225,9 @@ namespace HttpEmulator
                 if (this._isFixedChecked != value)
                 {
                     this._isFixedChecked = value;
-                    this.OnPropertyChanged("IsFixedChecked");
-                    this.OnPropertyChanged("IsStatusCodeEnabled");
-                    this.OnPropertyChanged("IsHeadersTextBoxEnabled");
+                    this.InvokePropertyChanged("IsFixedChecked");
+                    this.InvokePropertyChanged("IsStatusCodeEnabled");
+                    this.InvokePropertyChanged("IsHeadersTextBoxEnabled");
                 }
             }
         }
@@ -233,8 +240,8 @@ namespace HttpEmulator
                 if (this._isWrapChecked != value)
                 {
                     this._isWrapChecked = value;
-                    this.OnPropertyChanged("IsWrapChecked");
-                    this.OnPropertyChanged("FixedBodyWrapping");
+                    this.InvokePropertyChanged("IsWrapChecked");
+                    this.InvokePropertyChanged("FixedBodyWrapping");
                 }
             }
         }
@@ -262,7 +269,7 @@ namespace HttpEmulator
                 if (this._logText != value)
                 {
                     this._logText = value;
-                    this.OnPropertyChanged("LogText");
+                    this.InvokePropertyChanged("LogText");
                 }
             }
         }
@@ -284,7 +291,7 @@ namespace HttpEmulator
             var listenerType = GetCheckedListenerType();
 
             StartNewListener(listenerType);
-            this.OnPropertyChanged("IsListenerStarted");
+            this.InvokePropertyChanged("IsListenerStarted");
         }
 
         public void OnStopListener()
@@ -295,7 +302,7 @@ namespace HttpEmulator
                 _listener.Stop();
             }
             _listener = null;
-            this.OnPropertyChanged("IsListenerStarted");
+            this.InvokePropertyChanged("IsListenerStarted");
         }
 
         internal void OnSaveToFileClick()
@@ -348,6 +355,19 @@ namespace HttpEmulator
             this.FixedBody = fixedBody.Body;
             this.StatusCode = fixedBody.StatusCode;
             this.IndentFixedBody();
+        }
+
+        private void OnAdvancedClick()
+        {
+            var advancedDlg = new AdvancedForm
+                {
+                    DataContext =
+                        this.AdvancedSettings != null ? this.AdvancedSettings.Clone() : new AdvancedFormViewModel()
+                };
+            if (advancedDlg.ShowDialog() == true)
+            {
+                this.AdvancedSettings = advancedDlg.DataContext as AdvancedFormViewModel;
+            }
         }
 
         #endregion
@@ -411,6 +431,7 @@ namespace HttpEmulator
             }
 
             listener.StatusCode = StatusCode;
+            listener.Authentication = Utils.CreateAuthentication(this.AdvancedSettings);
 
             if (!listener.Headers.ContainsKey("Content-Type"))
                 listener.Headers.Add("Content-Type", "text/xml");
@@ -423,6 +444,8 @@ namespace HttpEmulator
             this.CurrentListenerType = listenerType;
             LogListenerStarted();
         }
+
+        
 
         private void OnErrorOccured(Exception e)
         {
@@ -529,7 +552,7 @@ namespace HttpEmulator
 
         #region Invoke Events
 
-        protected virtual void OnPropertyChanged(string propertyName)
+        protected virtual void InvokePropertyChanged(string propertyName)
         {
             if (this.PropertyChanged != null)
             {
@@ -542,66 +565,49 @@ namespace HttpEmulator
 
         #region Commands
 
-        private class GeneralCommand : ICommand
-        {
-            private readonly Action _executeDelegate;
-
-            public GeneralCommand(Action executeDelegate)
-            {
-                this._executeDelegate = executeDelegate;
-            }
-
-            public bool CanExecute(object parameter)
-            {
-                return true;
-            }
-
-            public event EventHandler CanExecuteChanged;
-
-            public void Execute(object parameter)
-            {
-                this._executeDelegate();
-            }
-        }
-
         public ICommand ClearTextBodyCommand
         {
-            get { return new GeneralCommand(() => this.FixedBody = string.Empty); }
+            get { return Utils.CreateCommand(() => this.FixedBody = string.Empty); }
         }
 
         public ICommand ClearLogCommand
         {
-            get { return new GeneralCommand(() => this.LogText = string.Empty); }
+            get { return Utils.CreateCommand(() => this.LogText = string.Empty); }
+        }
+
+        public ICommand OpenAdvancedCommand
+        {
+            get { return Utils.CreateCommand(this.OnAdvancedClick); }
         }
 
         public ICommand StartCommand
         {
-            get { return new GeneralCommand(this.OnStartClick); }
+            get { return Utils.CreateCommand(this.OnStartClick); }
         }
 
         public ICommand StopCommand
         {
-            get { return new GeneralCommand(this.OnStopListener); }
+            get { return Utils.CreateCommand(this.OnStopListener); }
         }
 
         public ICommand SaveToFileCommand
         {
-            get { return new GeneralCommand(this.OnSaveToFileClick); }
+            get { return Utils.CreateCommand(this.OnSaveToFileClick); }
         }
 
         public ICommand LoadBodyFromFileCommand
         {
-            get { return new GeneralCommand(this.OnLoadBodyFromFileClick); }
+            get { return Utils.CreateCommand(this.OnLoadBodyFromFileClick); }
         }
 
         public ICommand IndentCommand
         {
-            get { return new GeneralCommand(this.IndentFixedBody); }
+            get { return Utils.CreateCommand(this.IndentFixedBody); }
         }
 
         public ICommand LoadSavedResponseCommand
         {
-            get { return new GeneralCommand(this.OnLoadSavedResponseClick); }
+            get { return Utils.CreateCommand(this.OnLoadSavedResponseClick); }
         }
 
         #endregion

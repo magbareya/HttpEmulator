@@ -7,15 +7,12 @@ namespace HttpEmulator
     {
         public string Content { get; internal set; }
 
-        public FixedHttpResponse(int port)
-            : base(port)
+        public FixedHttpResponse(int port) : base(port)
         {
         }
 
-        protected override void HandleResponse(HttpListenerContext context)
+        protected override void HandleRequestInternal(HttpListenerContext context)
         {
-            base.HandleResponse(context);
-
             var writer = new StreamWriter(context.Response.OutputStream);
             writer.WriteLine(this.Content);
             writer.Flush();

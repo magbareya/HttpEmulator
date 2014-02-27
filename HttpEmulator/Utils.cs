@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Text;
+using System.Windows.Input;
 using System.Xml;
 using Newtonsoft.Json.Linq;
 
@@ -107,6 +108,46 @@ namespace HttpEmulator
             {
             }
             return responses;
+        }
+
+        public static Authentication CreateAuthentication(AdvancedFormViewModel advanced)
+        {
+            if (advanced == null || !advanced.UseAuthentication || string.IsNullOrEmpty(advanced.Username))
+                return null;
+
+            return new Authentication
+                {
+                    Username = advanced.Username,
+                    Password = advanced.Password,
+                    IsPreemptiveAuthentication = advanced.IsPreemptiveAuthentication
+                };
+        }
+
+        public static ICommand CreateCommand(Action executeAction)
+        {
+            return new GeneralCommand(executeAction);
+        }
+
+        private class GeneralCommand : ICommand
+        {
+            private readonly Action _executeDelegate;
+
+            public GeneralCommand(Action executeDelegate)
+            {
+                this._executeDelegate = executeDelegate;
+            }
+
+            public bool CanExecute(object parameter)
+            {
+                return true;
+            }
+
+            public event EventHandler CanExecuteChanged;
+
+            public void Execute(object parameter)
+            {
+                this._executeDelegate();
+            }
         }
     }
 }

@@ -9,7 +9,8 @@
     <Grid x:Name="LayoutRoot" >
         <Grid.RowDefinitions>
             <RowDefinition Height="35.392"/>
-            <RowDefinition Height="59.83"/>
+            <RowDefinition Height="28.358"/>
+            <RowDefinition Height="31.642"/>
             <RowDefinition Height="23.955"/>
             <RowDefinition Height="25*"/>
             <RowDefinition Height="237*" />
@@ -27,33 +28,34 @@
             <ColumnDefinition Width="100.99"/>
         </Grid.ColumnDefinitions>
 
-        <Button Name="btnStart" Command="{Binding StartCommand}" Content="Start" Grid.Column="2" Margin="12,9,122,0" Grid.ColumnSpan="2" />
-        <Button Name="btnStop" Command="{Binding StopCommand}" Content="Stop" Grid.RowSpan="2" Margin="38,10,0,59" Grid.Column="3" IsEnabled="{Binding IsListenerStarted,UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Name="btnClearLog" Command="{Binding ClearLogCommand}" Content="Clear Log" Grid.Column="5" Margin="5.7,8,8,1.6" />
-        <Button Name="btnSaveToFile" Command="{Binding SaveToFileCommand}" Content="Save log to file" Grid.Column="6" Margin="2.4,8.084,8,1.516" />
-        <Button Name="btnLoadBodyFromFile" Command="{Binding LoadBodyFromFileCommand}" Content="Load body from file" Grid.RowSpan="2" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}" Margin="2,54,7,4" Grid.Column="3" Grid.Row="1" />
-        <Button Name="btnClearBody" Command="{Binding ClearTextBodyCommand}"  Content="Clear Body" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="84,55,0,4" Grid.Row="1" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Name="btnIndent" Command="{Binding IndentCommand}" Content="Indent" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Height="26" HorizontalAlignment="Left" Margin="6,54,0,0" VerticalAlignment="Top" Width="86" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Name="btnLoadSavedResponse" Command="{Binding LoadSavedResponseCommand}" Content="Load Saved Response" Grid.RowSpan="2" Margin="1,0,8,0" Grid.Column="3" Grid.Row="3" Height="26" VerticalAlignment="Top" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Name="btnStart" Command="{Binding StartCommand}" Content="Start" Grid.Column="2" Margin="11.6,9,122,0.2" Grid.ColumnSpan="2" />
+        <Button Name="btnStop" Command="{Binding StopCommand}" Content="Stop" Grid.RowSpan="2" Margin="37.6,10,0,27.558" Grid.Column="3" IsEnabled="{Binding IsListenerStarted,UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Name="btnClearLog" Command="{Binding ClearLogCommand}" Content="Clear Log" Grid.Column="5" Margin="5.2,8,8.4,1.2" />
+        <Button Name="btnSaveToFile" Command="{Binding SaveToFileCommand}" Content="Save log to file" Grid.Column="6" Margin="2.6,8,8.2,1.2" />
+        <Button Name="btnLoadBodyFromFile" Command="{Binding LoadBodyFromFileCommand}" Content="Load body from file" Grid.RowSpan="2" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}" Margin="1.6,25.442,7,4.2" Grid.Column="3" Grid.Row="2" />
+        <Button Name="btnClearBody" Command="{Binding ClearTextBodyCommand}"  Content="Clear Body" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="84,26.442,0.4,4.2" Grid.Row="2" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Name="btnIndent" Command="{Binding IndentCommand}" Content="Indent" Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" Height="26" HorizontalAlignment="Left" Margin="5.6,25.442,0,0" VerticalAlignment="Top" Width="86" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Name="btnLoadSavedResponse" Command="{Binding LoadSavedResponseCommand}" Content="Load Saved Response" Grid.RowSpan="3" Margin="0.6,23.8,8,0" Grid.Column="3" Grid.Row="3" Height="26" VerticalAlignment="Top" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Name="btnAdvanced" Command="{Binding OpenAdvancedCommand}" Content="Advanced Settings" Grid.Column="3" HorizontalAlignment="Left" Margin="37.6,2.8,0,0" Grid.Row="1" VerticalAlignment="Top" Width="116" Height="25"/>
 
-        <RadioButton Name="rbEcho" Content="Echo" Height="20" Margin="7,6,14,0" Grid.Row="1" VerticalAlignment="Top" GroupName="returnType" IsChecked="{Binding IsEchoChecked,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" />
-        <RadioButton Name="rbFault" Content="Fault" Margin="7,30,0,0" Grid.Row="1" GroupName="returnType" IsChecked="{Binding IsFaultChecked,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55" />
-        <RadioButton Name="rbBody" Content="Fixed" Height="17.6" Margin="12,30,0,0" Grid.Row="1" VerticalAlignment="Top" GroupName="returnType" IsChecked="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="70" />
-        <RadioButton Name="rbEmpty" Content="Empty" GroupName="returnType" Height="20" IsChecked="{Binding IsEmptyChecked,UpdateSourceTrigger=PropertyChanged}" Margin="12,5,86,0" VerticalAlignment="Top" Grid.Row="1" Grid.ColumnSpan="2" />
+        <RadioButton Name="rbEcho" Content="Echo" Height="20" Margin="6.6,5.8,14.4,0" Grid.Row="1" VerticalAlignment="Top" GroupName="returnType" IsChecked="{Binding IsEchoChecked,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" />
+        <RadioButton Name="rbFault" Content="Fault" Margin="6.6,1.442,0,0" Grid.Row="2" GroupName="returnType" IsChecked="{Binding IsFaultChecked,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55" />
+        <RadioButton Name="rbBody" Content="Fixed" Height="18" Margin="12,1.442,0,0" Grid.Row="2" VerticalAlignment="Top" GroupName="returnType" IsChecked="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="70" />
+        <RadioButton Name="rbEmpty" Content="Empty" GroupName="returnType" Height="20" IsChecked="{Binding IsEmptyChecked,UpdateSourceTrigger=PropertyChanged}" Margin="12,4.8,86.4,0" VerticalAlignment="Top" Grid.Row="1" Grid.ColumnSpan="2" />
 
-        <TextBox Name="txtFixedBodyContent" Grid.ColumnSpan="4" Margin="8,2,8,4" Grid.Row="4" TextWrapping="{Binding FixedBodyWrapping,UpdateSourceTrigger=PropertyChanged}"  Text="{Binding FixedBody,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" />
-        <TextBox Name="txtHeaders" Grid.ColumnSpan="4" Margin="8,3.2,8,8" Grid.Row="6" TextWrapping="Wrap" Text="{Binding RawHeaders,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsHeadersTextBoxEnabled,UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-        <TextBox Grid.Column="1" Margin="8,8,0,1.6" TextWrapping="Wrap" Text="{Binding HostAddress,UpdateSourceTrigger=PropertyChanged}" Name="txtHost" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-        <TextBox Name="lblLogContent" Grid.Column="4" Margin="8" Grid.Row="1" Grid.RowSpan="7" TextWrapping="Wrap" Grid.ColumnSpan="3"  Text="{Binding LogText,UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+        <TextBox Name="txtFixedBodyContent" Grid.ColumnSpan="4" Margin="8,2.2,8,3" Grid.Row="5" TextWrapping="{Binding FixedBodyWrapping,UpdateSourceTrigger=PropertyChanged}"  Text="{Binding FixedBody,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+        <TextBox Name="txtHeaders" Grid.ColumnSpan="4" Margin="8,3.6,8,7.6" Grid.Row="7" TextWrapping="Wrap" Text="{Binding RawHeaders,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsHeadersTextBoxEnabled,UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+        <TextBox Grid.Column="1" Margin="7.6,8,0.4,1.2" TextWrapping="Wrap" Text="{Binding HostAddress,UpdateSourceTrigger=PropertyChanged}" Name="txtHost" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+        <TextBox Name="lblLogContent" Grid.Column="4" Margin="8,7.8,7.2,7.4" Grid.Row="1" Grid.RowSpan="8" TextWrapping="Wrap" Grid.ColumnSpan="3"  Text="{Binding LogText,UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
 
-        <Label Name="lblStatusCode" Content="Status Code:" Margin="8,2.4,0,8" Grid.Row="7"/>
-        <Label Name="lblBody" Content="Body:" Margin="8,56,10,0" Grid.Row="1" Grid.RowSpan="2" />
-        <Label Name="lblHeaders" Content="Headers:" Margin="8,0.8,8,-3.2" Grid.Row="5" Grid.RowSpan="2" />
-        <Label Content="Log:" Grid.Column="4" HorizontalAlignment="Left" Margin="8,9.6,0,0" Width="39.467"/>
-        <Label Content="Listen in port:" Margin="8,8,-2.4,1.6" Name="lblPort"/>
+        <Label Name="lblStatusCode" Content="Status Code:" Margin="8,2.4,0.4,8.4" Grid.Row="8"/>
+        <Label Name="lblBody" Content="Body:" Margin="8,27.442,10.4,0.2" Grid.Row="2" Grid.RowSpan="2" />
+        <Label Name="lblHeaders" Content="Headers:" Margin="8,1,8.4,29.4" Grid.Row="6" Grid.RowSpan="3" />
+        <Label Content="Log:" Grid.Column="4" HorizontalAlignment="Left" Margin="8,10,0,0.2" Width="39"/>
+        <Label Content="Listen in port:" Margin="8,8,89.4,1.2" Name="lblPort" Grid.ColumnSpan="2"/>
 
-        <ComboBox Name="lstStatusCodes" Grid.ColumnSpan="3" Grid.Column="1" Margin="4,2.4,8,8" Grid.Row="7" ItemsSource="{Binding StatusCodes,UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding SelectedStatusCodeIndex,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsStatusCodeEnabled,UpdateSourceTrigger=PropertyChanged}"/>
-        <ComboBox Name="lstSavedResponses" Grid.ColumnSpan="3" Grid.Row="3" Height="25" VerticalAlignment="Top" Margin="84,0,6,0" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PreDefinedFixedBodies,UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding SelectedFixedBodyIndex,UpdateSourceTrigger=PropertyChanged}"/>
-        <CheckBox Content="Wrap" Grid.Row="3" Height="16" HorizontalAlignment="Left" Margin="8,5,0,0" Name="chkWrap" VerticalAlignment="Top" IsChecked="{Binding IsWrapChecked,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}"/>
+        <ComboBox Name="lstStatusCodes" Grid.ColumnSpan="3" Grid.Column="1" Margin="3.6,2.4,8,8.4" Grid.Row="8" ItemsSource="{Binding StatusCodes,UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding SelectedStatusCodeIndex,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsStatusCodeEnabled,UpdateSourceTrigger=PropertyChanged}"/>
+        <ComboBox Name="lstSavedResponses" Grid.ColumnSpan="3" Grid.Row="3" Height="25" VerticalAlignment="Top" Margin="84,23.8,6.4,0" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PreDefinedFixedBodies,UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding SelectedFixedBodyIndex,UpdateSourceTrigger=PropertyChanged}" Grid.RowSpan="2"/>
+        <CheckBox Content="Wrap" Grid.Row="4" Height="16" HorizontalAlignment="Left" Margin="8,4.8,0,0" Name="chkWrap" VerticalAlignment="Top" IsChecked="{Binding IsWrapChecked,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsFixedChecked,UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </Window>
