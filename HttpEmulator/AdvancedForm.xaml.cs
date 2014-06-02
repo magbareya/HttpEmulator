@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -36,6 +37,19 @@ namespace HttpEmulator
         {
             this.DialogResult = true;
             this.Close();
+        }
+
+        private void AllowOnlyNumbers(object sender, TextCompositionEventArgs e)
+        {
+            int i;
+            if (int.TryParse(e.Text, out i) && i >= 0)
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                e.Handled = true;
+            }
         }
     }
 }

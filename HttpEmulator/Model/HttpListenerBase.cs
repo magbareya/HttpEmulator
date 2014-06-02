@@ -24,6 +24,7 @@ namespace HttpEmulator
         public int StatusCode { get; set; }
         public string RequestBody { get; set; }
         public int RunningPort { get; set; }
+        public int DelayTime { get; set; }
         public string Url { get; set; }
         public Authentication Authentication { get; set; }
 
@@ -126,8 +127,8 @@ namespace HttpEmulator
 
             try
             {
-                InvokeOnRequestReceived(context);
-                HandleRequest(context);
+                this.InvokeOnRequestReceived(context);
+                this.HandleRequest(context);
             }
             catch (Exception e)
             {
@@ -178,6 +179,9 @@ namespace HttpEmulator
                     context.Response.Headers.Add(h.Key, h.Value);
                 }
             }
+
+            if(this.DelayTime > 0)
+                Thread.Sleep(this.DelayTime);
 
             if (this.HandleRequestAuthentication(context))
             {

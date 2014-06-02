@@ -46,4 +46,20 @@
       </soap:Body>
     </soap:Envelope>
   </FixedBody>
+  <FixedBody name="ChoiceComplexArray response">
+    <grid:ChoiceComplexArray xmlns:grid="http://HpSoftware/SOA/XML_Grid/UnitTesting" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://HpSoftware/SOA/XML_Grid/UnitTesting ChoiceComplexArray.xsd">
+      <grid:secondChildInnerComplex>
+        <grid:firstChild>First</grid:firstChild>
+        <grid:secondChild>123</grid:secondChild>
+      </grid:secondChildInnerComplex>
+      <grid:firstChildInnerComplex>
+        <grid:firstChild>First</grid:firstChild>
+        <grid:secondChild>456</grid:secondChild>
+      </grid:firstChildInnerComplex>
+      <grid:thirdChildChildInnerComplex>
+        <grid:firstChild>First</grid:firstChild>
+        <grid:secondChild>789</grid:secondChild>
+      </grid:thirdChildChildInnerComplex>
+    </grid:ChoiceComplexArray>
+  </FixedBody>
 </FixedBodies>

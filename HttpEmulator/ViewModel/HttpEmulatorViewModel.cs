@@ -45,7 +45,6 @@ namespace HttpEmulator
         private List<string> _statusCodes;
         private ListenerType CurrentListenerType { get; set; }
         private Dictionary<string, PreDefinedFixedBody> _preDefinedFixedBodies;
-        private AdvancedFormViewModel _advancedSettings;
         private string _hostAddress;
         private string _fixedBody;
         private string _rawHeaders;
@@ -77,11 +76,7 @@ namespace HttpEmulator
 
         #region View Properties
 
-        public AdvancedFormViewModel AdvancedSettings
-        {
-            get { return this._advancedSettings; }
-            set { this._advancedSettings = value; }
-        }
+        public AdvancedFormViewModel AdvancedSettings { get; set; }
 
         public string HostAddress
         {
@@ -432,6 +427,7 @@ namespace HttpEmulator
 
             listener.StatusCode = StatusCode;
             listener.Authentication = Utils.CreateAuthentication(this.AdvancedSettings);
+            listener.DelayTime = Utils.GetDelayTimeInMilliseconds(this.AdvancedSettings);
 
             if (!listener.Headers.ContainsKey("Content-Type"))
                 listener.Headers.Add("Content-Type", "text/xml");

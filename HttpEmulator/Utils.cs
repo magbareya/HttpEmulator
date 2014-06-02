@@ -149,5 +149,15 @@ namespace HttpEmulator
                 this._executeDelegate();
             }
         }
+
+        public static int GetDelayTimeInMilliseconds(AdvancedFormViewModel advancedFormViewModel)
+        {
+            double d;
+            if (double.TryParse(advancedFormViewModel.DelayTimeString, out d))
+            {
+                return (int) d;
+            }
+            else throw new Exception("The Delay string wasn't a valid number");
+        }
     }
 }

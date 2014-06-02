@@ -14,6 +14,8 @@
 
         <TextBox Name="txtUsername" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UseAuthentication}" HorizontalAlignment="Left" Height="23" Margin="118,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="156"/>
         <TextBox Name="txtPassword" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UseAuthentication}" HorizontalAlignment="Left" Height="23" Margin="118,58,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="156"/>
+        <Label Content="Delay time (msec):" HorizontalAlignment="Left" Margin="10,124,0,0" VerticalAlignment="Top" Width="108"/>
+        <TextBox Name="txtDelay" PreviewTextInput="AllowOnlyNumbers" Text="{Binding DelayTimeString, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Left" Height="23" Margin="123,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
 
     </Grid>
 </Window>

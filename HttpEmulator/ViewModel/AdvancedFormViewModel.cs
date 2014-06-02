@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
@@ -12,6 +13,7 @@ namespace HttpEmulator
         public AdvancedFormViewModel()
         {
             this.UseAuthentication = false;
+            this._delayTimeString = "0";
         }
 
         #region Fields
@@ -20,6 +22,7 @@ namespace HttpEmulator
         private string _password;
         private bool _useAuthentication;
         private bool _isPreemptiveAuthentication;
+        private string _delayTimeString;
 
         #endregion
 
@@ -35,6 +38,16 @@ namespace HttpEmulator
                     this._username = value;
                     this.InvokePropertyChanged("Username");
                 }
+            }
+        }
+
+        public string DelayTimeString
+        {
+            get { return _delayTimeString; }
+            set
+            {
+                this._delayTimeString = value;
+                this.InvokePropertyChanged("DelayTimeString");
             }
         }
 
@@ -100,7 +113,8 @@ namespace HttpEmulator
                     IsPreemptiveAuthentication = this.IsPreemptiveAuthentication,
                     Password = this.Password,
                     Username = this.Username,
-                    UseAuthentication = this.UseAuthentication
+                    UseAuthentication = this.UseAuthentication,
+                    DelayTimeString = this.DelayTimeString
                 };
         }
     }
