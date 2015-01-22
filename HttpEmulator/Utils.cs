@@ -152,8 +152,8 @@ namespace HttpEmulator
 
         public static int GetDelayTimeInMilliseconds(AdvancedFormViewModel advancedFormViewModel)
         {
-            double d;
-            if (double.TryParse(advancedFormViewModel.DelayTimeString, out d))
+            double d = 0;
+            if (advancedFormViewModel == null || double.TryParse(advancedFormViewModel.DelayTimeString, out d))
             {
                 return (int) d;
             }
