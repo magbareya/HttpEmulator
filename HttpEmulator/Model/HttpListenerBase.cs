@@ -152,7 +152,17 @@ namespace HttpEmulator
             var headers = new SortedList<string, string>();
             foreach (string h in context.Request.Headers)
                 headers.Add(h, context.Request.Headers[h]);
-
+            if (!string.IsNullOrEmpty(context.Request.ContentType))
+                headers.Add("Content-type", context.Request.ContentType);
+            if (context.Request.AcceptTypes != null && context.Request.AcceptTypes.Length > 0)
+            {
+                var val = context.Request.AcceptTypes[0];
+                for (var i =1; i < context.Request.AcceptTypes.Length; i++)
+                {
+                    val += ", " + context.Request.AcceptTypes[i];
+                }
+                headers.Add("Accept", val);
+            }
             if (this.OnRequestReceived != null)
                 this.OnRequestReceived(this, this.RequestBody, headers);
         }
@@ -204,7 +214,7 @@ namespace HttpEmulator
                 return true;
             }
 
-            string username = null, password = null;
+            string username, password;
 
             if (this.Authentication.IsPreemptiveAuthentication)
             {
